@@ -14,13 +14,15 @@ def forum_edit(request, category_id, post_pk):
     if request.method == "POST": #<== this is only triggered when the user attempts to update form (updates content via forms and presses update button)
 
         #place updated content from form with current object in variable
+
         form_edit = PostForm(request.POST, instance=post)
 
         #if the updated object data is_valid continue
         if form_edit.is_valid():
-
+            post = form_edit.save(commit=False)
+            post.modified_date = timezone.now()
             #save the updated content into specific object
-            form_edit.save()
+            post.save()
 
             #redirect the user to post-object page
             return redirect('forum-detail', category_id=category_id, post_pk=post_pk)
@@ -41,7 +43,9 @@ def comment_edit(request, category_id, post_id, comment_id):
     if request.method == "POST":
         comment_edit = CommentForm(request.POST, instance=comment)
         if comment_edit.is_valid():
-            comment_edit.save()
+            comment = comment_edit.save(commit=False)
+            comment.modified_date = timezone.now()
+            comment.save()
             return redirect('forum-detail', category_id=category_id, post_pk=post_id)
     else:
         comment_edit = CommentForm(instance=comment)

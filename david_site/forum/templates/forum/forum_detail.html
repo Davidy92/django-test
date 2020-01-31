@@ -5,6 +5,10 @@
   <h1>{{ post_detail.title }}</h1>
   {{ post_detail.body|linebreaks }}
   <em>{{ post_detail.author }} - {{ post_detail.posted_date}} Vote: {{ total_post_vote }}</em><br><br>
+  <div class="modified_date">
+    <small>Modified Date: {{ post_detail.modified_date }}</small>
+  </div>
+
 
   <div id="log_block">
     <a class="edit_post" href="{% url 'forum-edit' category_id=category.id post_pk=post_detail.id %}"><button>Edit</button></a>
@@ -25,7 +29,12 @@
   <h3>Comment Section Below:</h3>
 
   {% for comment in post_comments %}
-    <br><br>{{ comment.comment|linebreaks }} {{ comment.author }} - {{ comment.posted_date|date:"N d, Y P" }} Vote: {{ total_comment|index:forloop.counter0 }}
+    <div>
+      {{ comment.comment|linebreaks }} {{ comment.author }} - {{ comment.posted_date|date:"N d, Y P" }} Vote: {{ total_comment|index:forloop.counter0 }}
+    </div>
+    <div class="modified_date{{ forloop.counter }}">
+      <small>Modified Date: {{ comment.modified_date }}</small>
+    </div>
     <div id="log_block" class="comment{{ forloop.counter }}">
       <a href="{% url 'comment-edit' category_id=category.id post_id=post_detail.id comment_id=comment.id %}"><button>Edit</button></a>
       <form action="{% url 'delete-comment' category_id=category.id comment_id=comment.id post_id=post_detail.id %}" method="POST">
@@ -47,7 +56,9 @@
 
 
     <script type="text/javascript">
+      modified_date("{{ comment.modified_date|safe }}", ".modified_date{{ forloop.counter }}");
       hide("{{ user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ comment.author }}", ".comment{{ forloop.counter }}");
+      // if statement which checks to see which button (like dislike) is displayed then use the appropriate function to hide
       hide_like("{{user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ comment.author }}", ".Like_button{{ forloop.counter }}");
       hide_like("{{user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ comment.author }}", ".Dislike_button{{ forloop.counter }}");
     </script>
@@ -64,5 +75,6 @@
   hide("{{ user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ post_detail.author }}", ".delete_post");
   hide_like("{{user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ post_detail.author }}", ".Like_post");
   hide_comment("{{ user.is_authenticated|yesno:'true,false'|safe }}", ".post_comment");
+  modified_date("{{post_detail.modified_date|safe}}", ".modified_date");
 </script>
 {% endblock content %}

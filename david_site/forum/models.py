@@ -17,7 +17,7 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     posted_date = models.DateTimeField(auto_now_add=True)
-    modified_date = models.DateTimeField(blank=True, auto_now=True)
+    modified_date = models.DateTimeField(blank=True, null=True)
 
     def total_post_vote(self):
         return self.post_vote.count()
@@ -29,6 +29,7 @@ class Comment(models.Model):
     comment = models.TextField()
     comment_vote = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='comment_votes', blank=True)
     posted_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(blank=True, null=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 

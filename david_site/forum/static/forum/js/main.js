@@ -7,7 +7,6 @@ function hide(authorized, loggedIn, postUser, element){
 
 function hide_like(authorized, loggedIn, postUser, element){
   var hide = document.querySelector(element);
-  console.log(authorized, loggedIn, postUser, element);
   if( authorized == 'false' || loggedIn == postUser){
     hide.style.display = 'none';
   }
@@ -28,6 +27,14 @@ function startTime(element) {
   document.getElementById(element).innerHTML = time;
 
   setTimeout(function() { startTime(element); } , 500);
+}
+
+function modified_date(isNull, element){
+  var hide = document.querySelector(element);
+  console.log(element, isNull);
+    if (isNull == "None"){
+      hide.style.display = 'none';
+  }
 }
 
 // function hide_log(authorized, parent, element){
