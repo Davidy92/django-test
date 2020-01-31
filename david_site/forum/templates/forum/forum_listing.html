@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <!-- Category title -->
+  <h1>{{ category.topic }} Forum</h1>
+  <div class="new_post">
+    <p><a href="{% url 'forum-new' category=category.id %}">New Post!</a></p>
+  </div>
+
+  <!-- All posts associated to it's category -->
+  <table>
+    {% for post in posts %}
+        <tr>
+          <!-- add category_id=category.id -->
+          <td><a href="{% url 'forum-detail' category_id=category.id post_pk=post.id %}">{{ post.title }}</a> - {{ post.posted_date|date:"N d, Y P" }} | Author: {{ post.author }}</td>
+        </tr>
+    {% endfor %}
+  </table>
+
+  <script type="text/javascript">
+    hide_comment("{{ user.is_authenticated|yesno:'true,false'|safe }}", ".new_post");
+  </script>
+{% endblock content %}

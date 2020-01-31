@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load index %}
+
+{% block content %}
+  <h1>{{ post_detail.title }}</h1>
+  {{ post_detail.body|linebreaks }}
+  <em>{{ post_detail.author }} - {{ post_detail.posted_date}} Vote: {{ total_post_vote }}</em><br><br>
+
+  <div id="log_block">
+    <a class="edit_post" href="{% url 'forum-edit' category_id=category.id post_pk=post_detail.id %}"><button>Edit</button></a>
+    <form class="delete_post" action="{% url 'delete-post' category_id=category.id post_id=post_detail.id %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Delete">
+    </form>
+    <form class="Like_post" action="{% url 'post-vote' category_id=category.id post_id=post_detail.id %}" method="POST">
+      {% csrf_token %}
+      {% if post_like %}
+          <button type="submit" name="post_id" value="{{ post_detail.id }}">Dislike</button>
+      {% else %}
+          <button type="submit" name="post_id" value="{{ post_detail.id }}">Like</button>
+      {% endif %}
+    </form>
+  </div>
+
+  <h3>Comment Section Below:</h3>
+
+  {% for comment in post_comments %}
+    <br><br>{{ comment.comment|linebreaks }} {{ comment.author }} - {{ comment.posted_date|date:"N d, Y P" }} Vote: {{ total_comment|index:forloop.counter0 }}
+    <div id="log_block" class="comment{{ forloop.counter }}">
+      <a href="{% url 'comment-edit' category_id=category.id post_id=post_detail.id comment_id=comment.id %}"><button>Edit</button></a>
+      <form action="{% url 'delete-comment' category_id=category.id comment_id=comment.id post_id=post_detail.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+      </form>
+    </div>
+    <div id="comment_like_block">
+      <form class="Like_button{{ forloop.counter }}" action="{% url 'comment-vote' category_id=category.id post_id=post_detail.id %}" method="POST">
+        {% csrf_token %}
+        <!-- How to iterate through this list -->
+        {% if comment_like|index:forloop.counter0 %}
+          <button type="submit" name="comment_id" value="{{ comment.id }}">Dislike</button>
+        {% else %}
+          <button type="submit" name="comment_id" value="{{ comment.id }}">Like</button>
+        {% endif %}
+      </form>
+    </div>
+
+
+    <script type="text/javascript">
+      hide("{{ user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ comment.author }}", ".comment{{ forloop.counter }}");
+      hide_like("{{user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ comment.author }}", ".Like_button{{ forloop.counter }}");
+      hide_like("{{user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ comment.author }}", ".Dislike_button{{ forloop.counter }}");
+    </script>
+
+  {% endfor %}
+<form method="POST" class="post_comment">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Comment">
+</form>
+
+<script type="text/javascript">
+  hide("{{ user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ post_detail.author }}", ".edit_post");
+  hide("{{ user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ post_detail.author }}", ".delete_post");
+  hide_like("{{user.is_authenticated|yesno:'true,false'|safe }}", "{{ user.username }}", "{{ post_detail.author }}", ".Like_post");
+  hide_comment("{{ user.is_authenticated|yesno:'true,false'|safe }}", ".post_comment");
+</script>
+{% endblock content %}

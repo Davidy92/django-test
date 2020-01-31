@@ -1,0 +1,16 @@
+/* make sure not to put (semicolon) ; outside brackets or will not render css. */
+#log_block {
+  display: flex;
+}
+
+#comment_like_block {
+  display: flex;
+}
+
+.post_action {
+  display: flex;
+}
+
+.button-con {
+  display: flex;
+}

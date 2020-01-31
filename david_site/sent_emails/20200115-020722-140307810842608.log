@@ -1,0 +1,25 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Password reset on localhost:8000
+From: webmaster@localhost
+To: davidyeritsyan@hotmail.com
+Date: Wed, 15 Jan 2020 10:07:22 -0000
+Message-ID: <157908284277.3392.6202035919122694593@david-ThinkPad-X260>
+
+
+You're receiving this email because you requested a password reset for your user account at localhost:8000.
+
+Please go to the following page and choose a new password:
+
+http://localhost:8000/david_site/reset/MQ/5d5-5308cd6a091111a97439/
+
+Your username, in case you've forgotten: david
+
+Thanks for using our site!
+
+The localhost:8000 team
+
+
+
+-------------------------------------------------------------------------------
